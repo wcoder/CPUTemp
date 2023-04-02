@@ -1,22 +1,18 @@
-﻿using Linux.Bluetooth;
-using System.Linq;
-using static System.Console;
+﻿using DotnetBleServer.Core;
+using YP.CPUTemp;
 
-var adapters = await BlueZManager.GetAdaptersAsync();
-var adapter = adapters.FirstOrDefault();
-if (adapter == null) {
-    throw new InvalidOperationException("NO BLE Adapters found!");
-}
+// Port to .NET: https://github.com/Douglas6/cputemp
+// BLE server example: https://github.com/phylomeno/dotnet-ble-server/tree/master/Examples
+await Task.Run(async () =>
+{
+    using (var serverContext = new ServerContext())
+    {
+        await serverContext.Connect();
 
+        await new TempAdvertisement(serverContext).Register();
+        await new ThermometerService(serverContext).Register();
 
-var adapterProps = await adapter.GetPropertiesAsync();
-
-WriteLine($"== Controller: {adapterProps.Address}");
-WriteLine($"== Name: {adapterProps.Name}");
-WriteLine($"== Alias: {adapterProps.Alias}");
-WriteLine($"== Powered: {adapterProps.Powered}");
-WriteLine($"== Discoverable: {adapterProps.Discoverable}");
-WriteLine($"== Pairable: {adapterProps.Pairable}");
-WriteLine($"== Discovering: {adapterProps.Discovering}");
-WriteLine($"== UUIDs:\n\t{string.Join("\n\t", adapterProps.UUIDs)}");
-
+        Console.WriteLine("Press CTRL+C to quit");
+        await Task.Delay(-1);
+    }
+});

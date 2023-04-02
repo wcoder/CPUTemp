@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Linux.Bluetooth" Version="5.64.0" />
+    <PackageReference Include="DotnetBleServer" Version="0.1.0-snapshot" />
   </ItemGroup>
 
 </Project>
