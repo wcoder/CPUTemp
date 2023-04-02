@@ -1,0 +1,54 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "pi-build-and-deploy",
+            "dependsOn": ["pi-build", "pi-mkdir", "pi-deploy", "pi-chmod"],
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "pi-build",
+            "dependsOn": "build",
+            "command": "dotnet",
+            "type": "process",
+            // "problemMatcher": "$msCompile",
+            "args": [
+                "publish",
+                "--runtime",
+                "linux-arm64",
+                // "--no-self-contained"
+            ],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            "label": "pi-mkdir",
+            "type": "shell",
+            "command": "ssh",
+            "args": [
+                "pi@192.168.8.174",
+                "mkdir --parents ~/${workspaceFolderBasename}"
+            ]
+        },
+        {
+            "label": "pi-deploy",
+            "type": "shell",
+            "command": "scp",
+            "args": [
+                "-r",
+                "./bin/Debug/net7.0/linux-arm64/publish/*",
+                "pi@192.168.8.174:~/${workspaceFolderBasename}"
+            ],
+        },
+        {
+            "label": "pi-chmod",
+            "type": "shell",
+            "command": "ssh",
+            "args": [
+                "pi@192.168.8.174",
+                "chmod +x ~/${workspaceFolderBasename}/${workspaceFolderBasename}"
+            ]
+        },
+    ],
+}

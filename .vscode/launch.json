@@ -1,0 +1,49 @@
+{
+    "configurations": [
+        // https://www.schaerens.ch/raspi-software-development-with-visual-studio-code-csharp-and-net-6-debugging/
+        {
+            "name": ".NET Remote Launch - Self-contained",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "pi-build-and-deploy",
+            // Path to the application's executable file on the target (Raspberry Pi)
+            "program": "~/${workspaceFolderBasename}/${workspaceFolderBasename}",
+            "args": [],
+            // Path to the working directory for the application
+            "cwd": "~/${workspaceFolderBasename}",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "pipeTransport": {
+                "pipeCwd": "${workspaceRoot}",
+                "pipeProgram": "ssh",
+                "pipeArgs": [
+                    "pi@192.168.8.174"
+                ],
+                "debuggerPath": "~/vsdbg/vsdbg"
+            },
+            // "logging": {
+            //     "engineLogging": true
+            // }
+        },
+        {
+            "name": "Launch on Pi",
+            "type": "coreclr",
+            "request": "launch",
+            // Path to the application's executable file on the target (Raspberry Pi)
+            "program": "~/${workspaceFolderBasename}/${workspaceFolderBasename}",
+            "args": [],
+            // Path to the working directory for the application
+            "cwd": "~/${workspaceFolderBasename}",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "pipeTransport": {
+                "pipeCwd": "${workspaceFolder}",
+                "pipeProgram": "ssh",
+                "pipeArgs": [
+                    "pi@192.168.8.174"
+                ],
+                "debuggerPath": "~/vsdbg/vsdbg"
+            }
+        }
+    ]
+}
